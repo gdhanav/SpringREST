@@ -15,59 +15,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.java.Service.CustomerService;
 import com.java.dto.Customer;
+import com.java.exception.CustomerException;
 
+/**
+ * @author Dhana
+ * Customer controller to support manage customer profiles
+ *
+ */
 @RestController
 public class CustomerController {
-	
+
 	@Autowired
 	private CustomerService service;
-	
-	@PostMapping(value="/create")
-	public ResponseEntity<String> createCustomer(@RequestBody Customer customer){
-		try{
-			service.addCustomer(customer);
-		}catch(Exception e){
-			return new ResponseEntity<String>("Cannot Create Customer. Please reach out to support Team", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity<String>("Customer detail created.",HttpStatus.OK);
+
+	@PostMapping(value = "/create")
+	public ResponseEntity<String> createCustomer(@RequestBody Customer customer) throws CustomerException {
+		service.addCustomer(customer);
+		return new ResponseEntity<String>("Customer detail created.", HttpStatus.OK);
 	}
-	@GetMapping(value="/getCustomers")
-	public ResponseEntity<List<Customer>> getCustomers(){
-		try{
-			return new ResponseEntity<List<Customer>>(service.getAllCustomers(),HttpStatus.OK);
-		}catch(Exception e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
+
+	@GetMapping(value = "/getCustomers")
+	public ResponseEntity<List<Customer>> getCustomers() throws CustomerException {
+		return new ResponseEntity<List<Customer>>(service.getAllCustomers(), HttpStatus.OK);
+
 	}
-	@GetMapping(value="/getCustomerById/{id}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable("id") int id){
-		try{
-			return new ResponseEntity<Customer>(service.getCustomerById(id),HttpStatus.OK);
-		}catch(Exception e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
+
+	@GetMapping(value = "/getCustomerById/{id}")
+	public ResponseEntity<Customer> getCustomerById(@PathVariable("id") int id) throws CustomerException {
+		return new ResponseEntity<Customer>(service.getCustomerById(id), HttpStatus.OK);
 	}
-	
-	@PutMapping(value="/updateCustomer")
-	public ResponseEntity<String> updateCustomer(@RequestBody Customer customer){
-		try{
-			service.updateCustomer(customer);
-		}catch(Exception e){
-			return new ResponseEntity<String>("Cannot update Customer. Please reach out to support Team", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity<String>("Customer detail updated.",HttpStatus.OK);
+
+	@PutMapping(value = "/updateCustomer")
+	public ResponseEntity<String> updateCustomer(@RequestBody Customer customer) throws CustomerException {
+		service.updateCustomer(customer);
+		return new ResponseEntity<String>("Customer detail updated.", HttpStatus.OK);
 	}
-	
-	@DeleteMapping(value="/delete/{id}")
-	public ResponseEntity<String> deleteCustomer(@PathVariable("id") int id){
-		try{
-			service.deletCustomer(id);
-		}catch(Exception e){
-			return new ResponseEntity<String>("Cannot delete Customer. Please reach out to support Team", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity<String>("Customer detail deleted.",HttpStatus.OK);
+
+	@DeleteMapping(value = "/delete/{id}")
+	public ResponseEntity<String> deleteCustomer(@PathVariable("id") int id) throws CustomerException {
+		service.deletCustomer(id);
+		return new ResponseEntity<String>("Customer detail deleted.", HttpStatus.OK);
 	}
 
 }
